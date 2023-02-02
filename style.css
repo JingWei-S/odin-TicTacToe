@@ -1,0 +1,23 @@
+body {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: 5em;
+}
+
+.row {
+    display: flex;
+}
+
+.cube {
+    border: 2px solid salmon;
+    margin-left: -1px; /*make the grid look better */
+    margin-bottom: -1px;
+    box-sizing: border-box;
+}
