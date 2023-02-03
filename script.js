@@ -1,6 +1,6 @@
 // build the gameBoard as module
 const gameBoard = (() => {
-    let tics = ['X', 'X', 'X', 'O', 'O', 'X', 'O', 'O', 'O'];   // this is to store the tic tocs
+    let tics = new Array(9).fill(null); // this is the initial array
     const container = document.querySelector(".container");
     const draw = () => {
         for (let i = 0; i < 9; i++) {
@@ -14,37 +14,64 @@ const gameBoard = (() => {
 // draw the board
 gameBoard.draw();
 
-// build the module for display control
-const displayControl = (() => {
-    const container = document.querySelector(".container");
-    const add = (tics) => {
-        // const cubes = container.querySelector(".cube:nth-child(2)");
-        // console.log(tics[2]);
-        // cubes.textContent = tics[2];
-        // add all the dummy tics to the game board
-        for (let i = 0; i < 9; i++) {
-            const cube = container.querySelector(`.cube:nth-child(${i+1})`);
-            // console.log(tics[i]);
-            cube.textContent = tics[i];
-        }
-    }
-    return {add}
-})();
-
-displayControl.add(gameBoard.tics);
 // build the player factory function 
-const Player = (name, side) => {
+const Player = (name, side, nextStep) => {
+    const getStep = () => nextStep;
     const getName = () => name;
-    // addTic - add tic to the board and update the board
-    const addTic = () => {
-        const cubes = document.querySelectorAll(".cube");
-        cubes.forEach(cube => cube.addEventListener("click", (e) => {
-            console.log(side)
-            e.target.textContent = side;
-        }));
-    };
-    return {getName, addTic}
+    const getSide = () => side;
+    const changeStep = () => nextStep = !nextStep;
+
+    return {getName, getStep, getSide, changeStep}
 };
 
-const player1 = Player('Jing', '😈');
-const player2 = Player('Saumya', '🥰');
+const player1 = Player('Jing', '😈', true);
+const player2 = Player('Saumya', '🥰', false);
+
+
+
+// build the module for display control
+const displayControl = (() => {
+    // const container = document.querySelector(".container");
+    
+    const _whoPlay = (player1, player2) => player1.getStep() === true ? player1 : player2;
+
+    const _change = (player1, player2) => {
+        player1.changeStep();
+        console.log(player1.getStep());
+        player2.changeStep();
+        console.log(player2.getStep());
+    }
+
+    const _nextPlay = (player1, player2) => {
+        // change the player
+        _change(player1, player2);
+        const displayPlayer = document.querySelector('.display-player');
+        displayPlayer.textContent = player1.getStep() === true ? player1.getName() : player2.getName();
+    }
+
+
+
+    const addTic = (player1, player2) => {
+        // get the current player
+        const player = _whoPlay(player1, player2);
+        console.log(player.getName());
+        // make the choice
+        const side = player.getSide();
+        const container = document.querySelector('.container');
+        container.addEventListener('click', (event) => {
+        const clickedDiv = event.target;
+        const childIndex = Array.prototype.indexOf.call(clickedDiv.parentNode.children, clickedDiv);
+        const cube = container.querySelector(`.cube:nth-child(${childIndex+1})`);
+        cube.textContent = side;
+
+        // change the player and display the next player
+        _nextPlay(player1, player2);
+        console.log('test');
+        });
+    }
+
+    return {addTic}
+})();
+
+displayControl.addTic(player1, player2);
+
