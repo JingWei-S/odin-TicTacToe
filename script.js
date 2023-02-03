@@ -33,20 +33,23 @@ const player2 = Player('Saumya', '🥰', false);
 const displayControl = (() => {
     // const container = document.querySelector(".container");
     
-    const _whoPlay = (player1, player2) => player1.getStep() === true ? player1 : player2;
+    const _whoPlay = (player1, player2) => {
+        const displayPlayer = document.querySelector('.display-player');
+        const curPlayer = player1.getStep() === true ? player1 : player2;
+        displayPlayer.textContent = `Current player: ${curPlayer.getName()}`
+        return player1.getStep() === true ? player1 : player2;
+    } 
 
     const _change = (player1, player2) => {
         player1.changeStep();
-        console.log(player1.getStep());
+        // console.log(player1.getStep());
         player2.changeStep();
-        console.log(player2.getStep());
+        // console.log(player2.getStep());
     }
 
     const _nextPlay = (player1, player2) => {
         // change the player
         _change(player1, player2);
-        const displayPlayer = document.querySelector('.display-player');
-        displayPlayer.textContent = player1.getStep() === true ? player1.getName() : player2.getName();
     }
 
 
@@ -63,11 +66,10 @@ const displayControl = (() => {
         const childIndex = Array.prototype.indexOf.call(clickedDiv.parentNode.children, clickedDiv);
         const cube = container.querySelector(`.cube:nth-child(${childIndex+1})`);
         cube.textContent = side;
-
+        });
         // change the player and display the next player
         _nextPlay(player1, player2);
-        console.log('test');
-        });
+        // console.log('test');
     }
 
     return {addTic}
