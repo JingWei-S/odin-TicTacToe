@@ -14,14 +14,16 @@ body {
     background-color: black;
     width: fit-content;
     padding: 10px;
-}
-
-.row {
-    display: flex;
-    gap: 2px;
+    justify-items: stretch;
 }
 
 .cube {
     border: 2px solid white;
     box-sizing: border-box;
+    color: white;
+    font-size: 100px;
+    font-weight: bolder;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
