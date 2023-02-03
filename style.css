@@ -6,18 +6,22 @@ body {
 }
 
 .container {
-    display: flex;
-    flex-direction: column;
-    padding: 5em;
+    display: grid;
+    grid-template-columns: repeat(3, 150px);
+    grid-template-rows: repeat(3, 150px);
+    margin: 5em;
+    gap: 10px;
+    background-color: black;
+    width: fit-content;
+    padding: 10px;
 }
 
 .row {
     display: flex;
+    gap: 2px;
 }
 
 .cube {
-    border: 2px solid salmon;
-    margin-left: -1px; /*make the grid look better */
-    margin-bottom: -1px;
+    border: 2px solid white;
     box-sizing: border-box;
 }
