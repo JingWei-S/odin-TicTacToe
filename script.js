@@ -179,7 +179,7 @@ const startGame = (() => {
       [player1, player2] = _getPlayers(formInfo);
     //   console.log(formInfo.elements.icon1);
       document.querySelector(".player-init").style.display = "none";
-      document.querySelector(".tictactoe").style.display = "block";
+      document.querySelector(".tictactoe").style.display = "flex";
       displayControl.addTic(player1, player2);
     });
   };
