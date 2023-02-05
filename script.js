@@ -25,8 +25,18 @@ const Player = (name, side, nextStep) => {
   return { getName, getStep, getSide, changeStep, playerTic };
 };
 
-const player1 = Player("Jing", "😈", true);
-const player2 = Player("Saumya", "🥰", false);
+// const startGame = (() => {
+//     const start = () => {
+//       const player1 = Player("Jing", "😈", true);
+//       const player2 = Player("Saumya", "🥰", false);
+//       return {player1, player2}
+//     }
+  
+//     return { start };
+//   })();
+  
+//   player1, player2 = startGame.start();
+  
 
 // build the winner determination algorithm
 const winnerAlgo = (() => {
@@ -38,7 +48,7 @@ const winnerAlgo = (() => {
     [1, 4, 7],
     [2, 5, 8],
     [0, 4, 8],
-    [2, 4, 7],
+    [2, 4, 6],
   ];
 
   const ifWin = (ticArray) => {
@@ -65,66 +75,72 @@ const winnerAlgo = (() => {
 
 // build the module for display control
 const displayControl = (() => {
-  // const container = document.querySelector(".container");
-
-  const _whoPlay = (player1, player2) => {
+  const container = document.querySelector(".container");
+  const player1 = Player("Jing", "😈", true);
+  const player2 = Player("Saumya", "🥰", false);
+  
+  let count = 0;
+  let hasWinner = false;
+  const _whoPlay = () => {
     const displayPlayer = document.querySelector(".display-player");
-    const curPlayer = player1.getStep() === true ? player1 : player2;
+    const curPlayer = player1.getStep() === true ? player2 : player1;
     displayPlayer.textContent = `Current player: ${curPlayer.getName()}`;
     return player1.getStep() === true ? player1 : player2;
   };
 
-  const _change = (player1, player2) => {
+  const _change = () => {
     player1.changeStep();
     // console.log(player1.getStep());
     player2.changeStep();
     // console.log(player2.getStep());
   };
 
-  const _nextPlay = (player1, player2) => {
+  const _nextPlay = () => {
     // change the player
     _change(player1, player2);
   };
 
-  const addTic = (player1, player2) => {
-    // get the current player
-    const player = _whoPlay(player1, player2);
-    let count = 0;
-    // make the choice
-    const side = player.getSide();
-    const container = document.querySelector(".container");
-    container.addEventListener(
-      "click",
-      (event) => {
-        const clickedDiv = event.target;
-        const childIndex = Array.prototype.indexOf.call(
-          clickedDiv.parentNode.children,
-          clickedDiv
-        );
-        const cube = container.querySelector(
-          `.cube:nth-child(${childIndex + 1})`
-        );
-        // add the array index to the player tic array
-        player.playerTic.push(childIndex);
-        cube.textContent = side;
-        // determine if a player has won or not
-        if (winnerAlgo.ifWin(player.playerTic)) {
-          displayWinner.showWinner(player);
-          return true // a user has won
+  const addTic = () => {
+    _whoPlay(player1, player2);
+    container.addEventListener("click", (event) => {
+      for (let i = 0; i < 9; i++) {
+        if (count === i) {
+          // get the current player
+          const player = _whoPlay(player1, player2);
+          // make the choice
+          const side = player.getSide();
+          const clickedDiv = event.target;
+          const childIndex = Array.prototype.indexOf.call(
+            clickedDiv.parentNode.children,
+            clickedDiv
+          );
+          const cube = container.querySelector(
+            `.cube:nth-child(${childIndex + 1})`
+          );
+          // add the array index to the player tic array
+          player.playerTic.push(childIndex);
+          cube.textContent = side;
+          // determine if a player has won or not
+          if (winnerAlgo.ifWin(player.playerTic)) {
+            displayWinner.showWinner(player);
+            hasWinner = true;
+          } else {
+            _nextPlay(player1, player2);
+            console.log(count);
+            count++;
+            break;
+          }
         }
-      },
-      { once: true }
-    );
-    // change the player and display the next player
-    _nextPlay(player1, player2);
-    return false  
-    // console.log('test');
+        if (hasWinner) break
+      }
+    });
+
   };
 
   return { addTic };
 })();
 
-displayControl.addTic(player1, player2);
+
 
 const displayWinner = (() => {
   const showWinner = (player) => {
@@ -135,24 +151,5 @@ const displayWinner = (() => {
   return { showWinner };
 })();
 
+displayControl.addTic();
 
-const startGame = (() => {
-    const start = () => {
-        let hasWinner = false;
-        let count = 0;
-        while (count < 9) {
-            hasWinner = displayControl.addTic(player1, player2);
-            if (!hasWinner) {
-                count++;
-            } else {
-                break;
-            }
-        }
-        const winnerBlock = document.querySelector(".display-winner");
-        winnerBlock.textContent = "No one wins";
-    }
-
-    return { start }
-})();
-
-// startGame.start();
