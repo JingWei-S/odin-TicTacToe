@@ -89,7 +89,7 @@ const displayControl = (() => {
   const addTic = (player1, player2) => {
     // get the current player
     const player = _whoPlay(player1, player2);
-    console.log(player.getName());
+    let count = 0;
     // make the choice
     const side = player.getSide();
     const container = document.querySelector(".container");
@@ -110,13 +110,14 @@ const displayControl = (() => {
         // determine if a player has won or not
         if (winnerAlgo.ifWin(player.playerTic)) {
           displayWinner.showWinner(player);
+          return true // a user has won
         }
       },
       { once: true }
     );
     // change the player and display the next player
     _nextPlay(player1, player2);
-
+    return false  
     // console.log('test');
   };
 
@@ -133,3 +134,25 @@ const displayWinner = (() => {
 
   return { showWinner };
 })();
+
+
+const startGame = (() => {
+    const start = () => {
+        let hasWinner = false;
+        let count = 0;
+        while (count < 9) {
+            hasWinner = displayControl.addTic(player1, player2);
+            if (!hasWinner) {
+                count++;
+            } else {
+                break;
+            }
+        }
+        const winnerBlock = document.querySelector(".display-winner");
+        winnerBlock.textContent = "No one wins";
+    }
+
+    return { start }
+})();
+
+// startGame.start();
