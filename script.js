@@ -150,8 +150,6 @@ const startGame = (() => {
                     console.log(choice);
                     choice.classList.add("chosen");
                     sides.push(choice.value);
-                } else {
-                    choice.classList.add("not-chosen");
                 }
             }
     })
