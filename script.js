@@ -87,6 +87,16 @@ const displayControl = (() => {
     _change(player1, player2);
   };
 
+  const _restart = () => {
+    const restart = document.createElement("button");
+    restart.setAttribute("id", "restart");
+    restart.textContent = "Restart";
+    displayPlayer.appendChild(restart);
+    restart.addEventListener("click", () => {
+        window.location.reload();
+    });
+  };
+
   const addTic = (player1, player2) => {
     displayPlayer.textContent = `Current player: ${player1.getName()} ${player1.getSide()}`;
     container.addEventListener("click", (event) => {
@@ -118,7 +128,10 @@ const displayControl = (() => {
             break;
           }
         }
-        if (hasWinner) break;
+        if (hasWinner) {
+          _restart();
+          break;
+        }
       }
     });
   };
@@ -140,23 +153,23 @@ const startGame = (() => {
   const _sideChoice = () => {
     let sides = [];
     const sideChoices = document.querySelectorAll(".button-group");
-    sideChoices.forEach(group => {
-        group.addEventListener("click", (e) => {
-            // console.log(e.target);
-            // console.log(e.target.parentNode.children); // any other way to get it?
-            for (const choice of e.target.parentNode.children) {
-                choice.disabled = true;
-                if (choice === e.target) {
-                    console.log(choice);
-                    choice.classList.add("chosen");
-                    sides.push(choice.value);
-                }
-            }
-    })
+    sideChoices.forEach((group) => {
+      group.addEventListener("click", (e) => {
+        // console.log(e.target);
+        // console.log(e.target.parentNode.children); // any other way to get it?
+        for (const choice of e.target.parentNode.children) {
+          choice.disabled = true;
+          if (choice === e.target) {
+            console.log(choice);
+            choice.classList.add("chosen");
+            sides.push(choice.value);
+          }
+        }
+      });
     });
     console.log(sides);
-    return sides
-  }
+    return sides;
+  };
 
   const _getPlayers = (form) => {
     const player1_name = form.elements.name1.value;
@@ -177,7 +190,7 @@ const startGame = (() => {
     formInfo.addEventListener("submit", (e) => {
       e.preventDefault(formInfo.elements.name1.value);
       [player1, player2] = _getPlayers(formInfo);
-    //   console.log(formInfo.elements.icon1);
+      //   console.log(formInfo.elements.icon1);
       document.querySelector(".player-init").style.display = "none";
       document.querySelector(".tictactoe").style.display = "flex";
       displayControl.addTic(player1, player2);
