@@ -36,8 +36,32 @@ body {
 }
 
 .display-player {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: #305F72;
     color: white;
     font-size: 36px;
     padding: 0.5em 3em;
+}
+
+.tictactoe {
+    display: none;
+}
+
+.side-choice {
+    appearance: none;
+    border: 2px solid black;
+    border-radius: 5px;
+    font-size: 36px;
+    padding: 0.1em 0.5em;
+}
+
+.not-chosen {
+    appearance: none;
+    background-color: red;
+}
+.chosen {
+    appearance: none;
+    background-color: green;
 }

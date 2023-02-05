@@ -25,19 +25,6 @@ const Player = (name, side, nextStep) => {
   return { getName, getStep, getSide, changeStep, playerTic };
 };
 
-// const startGame = (() => {
-//     const start = () => {
-//       const player1 = Player("Jing", "😈", true);
-//       const player2 = Player("Saumya", "🥰", false);
-//       return {player1, player2}
-//     }
-  
-//     return { start };
-//   })();
-  
-//   player1, player2 = startGame.start();
-  
-
 // build the winner determination algorithm
 const winnerAlgo = (() => {
   const combination = [
@@ -76,15 +63,15 @@ const winnerAlgo = (() => {
 // build the module for display control
 const displayControl = (() => {
   const container = document.querySelector(".container");
-  const player1 = Player("Jing", "😈", true);
-  const player2 = Player("Saumya", "🥰", false);
-  
+  const displayPlayer = document.querySelector(".display-player");
+  //   const player1 = Player("Jing", "😈", true);
+  //   const player2 = Player("Saumya", "🥰", false);
+
   let count = 0;
   let hasWinner = false;
-  const _whoPlay = () => {
-    const displayPlayer = document.querySelector(".display-player");
+  const _whoPlay = (player1, player2) => {
     const curPlayer = player1.getStep() === true ? player2 : player1;
-    displayPlayer.textContent = `Current player: ${curPlayer.getName()}`;
+    displayPlayer.textContent = `Current player: ${curPlayer.getName()} ${curPlayer.getSide()}`;
     return player1.getStep() === true ? player1 : player2;
   };
 
@@ -95,13 +82,13 @@ const displayControl = (() => {
     // console.log(player2.getStep());
   };
 
-  const _nextPlay = () => {
+  const _nextPlay = (player1, player2) => {
     // change the player
     _change(player1, player2);
   };
 
-  const addTic = () => {
-    _whoPlay(player1, player2);
+  const addTic = (player1, player2) => {
+    displayPlayer.textContent = `Current player: ${player1.getName()} ${player1.getSide()}`;
     container.addEventListener("click", (event) => {
       for (let i = 0; i < 9; i++) {
         if (count === i) {
@@ -126,30 +113,80 @@ const displayControl = (() => {
             hasWinner = true;
           } else {
             _nextPlay(player1, player2);
-            console.log(count);
+            // console.log(count);
             count++;
             break;
           }
         }
-        if (hasWinner) break
+        if (hasWinner) break;
       }
     });
-
   };
 
   return { addTic };
 })();
 
-
-
 const displayWinner = (() => {
   const showWinner = (player) => {
-    const winnerBlock = document.querySelector(".display-winner");
-    winnerBlock.textContent = `The winner is ${player.getName()}`;
+    const winnerBlock = document.querySelector(".display-player");
+    winnerBlock.textContent = `The winner is ${player.getName()} ${player.getSide()}`;
   };
 
   return { showWinner };
 })();
 
-displayControl.addTic();
+// start the game
+const startGame = (() => {
+  const _sideChoice = () => {
+    let sides = [];
+    const sideChoices = document.querySelectorAll(".button-group");
+    sideChoices.forEach(group => {
+        group.addEventListener("click", (e) => {
+            // console.log(e.target);
+            // console.log(e.target.parentNode.children); // any other way to get it?
+            for (const choice of e.target.parentNode.children) {
+                choice.disabled = true;
+                if (choice === e.target) {
+                    console.log(choice);
+                    choice.classList.add("chosen");
+                    sides.push(choice.value);
+                } else {
+                    choice.classList.add("not-chosen");
+                }
+            }
+    })
+    });
+    console.log(sides);
+    return sides
+  }
 
+  const _getPlayers = (form) => {
+    const player1_name = form.elements.name1.value;
+    const player1_side = form.querySelector(".icon1 .chosen").value;
+    const player2_name = form.elements.name2.value;
+    const player2_side = form.querySelector(".icon2 .chosen").value;
+    console.log(form.querySelector(".chosen"));
+    const player1 = Player(player1_name, player1_side, true);
+    const player2 = Player(player2_name, player2_side, false);
+
+    return [player1, player2];
+  };
+
+  const start = () => {
+    console.log("test");
+    _sideChoice();
+    const formInfo = document.querySelector("form");
+    formInfo.addEventListener("submit", (e) => {
+      e.preventDefault(formInfo.elements.name1.value);
+      [player1, player2] = _getPlayers(formInfo);
+    //   console.log(formInfo.elements.icon1);
+      document.querySelector(".player-init").style.display = "none";
+      document.querySelector(".tictactoe").style.display = "block";
+      displayControl.addTic(player1, player2);
+    });
+  };
+
+  return { start };
+})();
+
+startGame.start();

@@ -6,9 +6,47 @@
     <title>Tic Tac Toe</title>
 </head>
 <body>
-    <div class="container"></div>
-    <div class="display-player"></div>
-    <div class="display-winner"></div>
+    <section class="player-init">
+        <div class="form-container">
+            <form action="#">
+                <div class="player1">
+                    <div class="name">
+                        <label for="name1">Player 1</label>
+                        <input type="text" name="name1" id="name1" placeholder="player 1 name">
+                    </div>
+                    <div class="icon1">
+                        <label for="icon1">Choose your character</label>
+                        <div class="button-group">
+                            <input type="button" name="icon1" value="😈" class="side-choice">
+                            <input type="button" name="icon1" value="👹" class="side-choice">
+                            <input type="button" name="icon1" value="💀" class="side-choice">
+                            <input type="button" name="icon1" value="👽" class="side-choice">
+                        </div>
+                    </div>
+                </div>
+                <div class="player2">
+                    <div class="name">
+                        <label for="name2">Player 2</label>
+                        <input type="text" name="name2" id="name2" placeholder="player 2 name">
+                    </div>
+                    <div class="icon2">
+                        <label for="icon2">Choose your character</label>
+                        <div class="button-group">
+                            <input type="button" name="icon2" value="😇" class="side-choice">
+                            <input type="button" name="icon2" value="🥰" class="side-choice">
+                            <input type="button" name="icon2" value="🥳" class="side-choice">
+                            <input type="button" name="icon2" value="😽" class="side-choice">
+                        </div>
+                    </div>
+                </div>
+                <input type="submit" value="Start Game">
+            </form>
+        </div>
+    </section>
+    <section class="tictactoe">
+        <div class="container"></div>
+        <div class="display-player"></div>
+    </section>
 </body>
 <script src="script.js"></script>
 </html>
