@@ -93,7 +93,7 @@ const displayControl = (() => {
     restart.textContent = "Restart";
     displayPlayer.appendChild(restart);
     restart.addEventListener("click", () => {
-        window.location.reload();
+      window.location.reload();
     });
   };
 
@@ -121,17 +121,23 @@ const displayControl = (() => {
           if (winnerAlgo.ifWin(player.playerTic)) {
             displayWinner.showWinner(player);
             hasWinner = true;
+            _restart();
+            break;
           } else {
-            _nextPlay(player1, player2);
+            _nextPlay(player1, player2, count);
             // console.log(count);
             count++;
             break;
           }
         }
-        if (hasWinner) {
-          _restart();
-          break;
-        }
+        if (hasWinner) break; // fix the loop bug
+      }
+      // console.log(count === 9);
+      if (count === 9) {
+        console.log("test");
+        displayPlayer.textContent = "Hahah, everyone sucks";
+        _restart();
+        // break;
       }
     });
   };
@@ -157,12 +163,15 @@ const startGame = (() => {
       group.addEventListener("click", (e) => {
         // console.log(e.target);
         // console.log(e.target.parentNode.children); // any other way to get it?
-        for (const choice of e.target.parentNode.children) {
-          choice.disabled = true;
-          if (choice === e.target) {
-            console.log(choice);
-            choice.classList.add("chosen");
-            sides.push(choice.value);
+        // console.log(e.target.tagName);
+        if (e.target.tagName === "INPUT") {
+          for (const choice of e.target.parentNode.children) {
+            choice.disabled = true;
+            if (choice === e.target) {
+              console.log(choice);
+              choice.classList.add("chosen");
+              sides.push(choice.value);
+            }
           }
         }
       });

@@ -154,6 +154,7 @@ input[type="submit"]:hover {
 }
 
 #restart {
+    /* display: none; */
     background-color: #533483;
     border: 2px solid white;
     border-radius: 5px;
